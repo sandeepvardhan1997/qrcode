@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Generator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e6ecef;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #f0ffc0;
+            margin-bottom: 40px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: rgb(187, 187, 187);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .container:hover {
+            transform: scale(1.02);
+        }
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .menu button {
+            background-color: #86aad1;
+            color: rgb(0, 0, 0);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .menu button:hover {
+            background-color: #3c6ea3;
+            transform: scale(1.05);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+        textarea, input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        textarea:focus, input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button.submit {
+            background-color: #b805ee;
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+            border: none;
+            padding: 10px;
+            border-radius: 50px;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button.submit:hover {
+            background-color: #882160;
+            transform: scale(1.05);
+        }
+        #qrCode {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .download {
+            display: none;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .form-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .form-section.show {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QR Code Generator</h1>
+        <div class="menu">
+            <button id="urlMenu">URL</button>
+            <button id="textMenu">TEXT</button>
+        </div>
+
+        <!-- URL Section -->
+        <div id="urlSection" class="form-section">
+            <label for="urlInput">Enter URL:</label>
+            <input type="text" id="urlInput" required>
+            <button class="submit" id="urlSubmit">Generate QR Code</button>
+            <div id="urlQrCode"></div>
+            <a id="urlDownloadLink" class="download" download>Download QR Code</a>
+        </div>
+
+        <!-- TEXT Section -->
+        <div id="textSection" class="form-section">
+            <label for="textInput">Enter Text:</label>
+            <textarea id="textInput" required></textarea>
+            <button class="submit" id="textSubmit">Generate QR Code</button>
+            <div id="textQrCode"></div>
+            <a id="textDownloadLink" class="download" download>Download QR Code</a>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Show appropriate section based on menu clicked
+            $('#urlMenu').click(function() {
+                $('.form-section').removeClass('show');
+                $('#urlSection').addClass('show');
+            });
+            $('#textMenu').click(function() {
+                $('.form-section').removeClass('show');
+                $('#textSection').addClass('show');
+            });
+
+            // Generate QR Code for URL
+            $('#urlSubmit').click(function() {
+                var url = $('#urlInput').val();
+                if (!url) {
+                    alert('Please enter a URL.');
+                    return;
+                }
+                var qrUrl = 'https://quickchart.io/qr?text=' + encodeURIComponent(url) + '&size=150';
+                $('#urlQrCode').html('<img src="' + qrUrl + '" alt="QR Code">');
+                $('#urlDownloadLink').attr('href', qrUrl).show();
+            });
+
+            // Generate QR Code for Text
+            $('#textSubmit').click(function() {
+                var text = $('#textInput').val();
+                if (!text) {
+                    alert('Please enter text.');
+                    return;
+                }
+                var qrUrl = 'https://quickchart.io/qr?text=' + encodeURIComponent(text) + '&size=150';
+                $('#textQrCode').html('<img src="' + qrUrl + '" alt="QR Code">');
+                $('#textDownloadLink').attr('href', qrUrl).show();
+            });
+        });
+    </script>
+</body>
+</html>
